@@ -8,12 +8,14 @@ import { cartTotals, type ResolvedLine } from "@/lib/pricing";
 
 export function OrderSummary({
   lines,
+  giftPacking = false,
   children,
 }: {
   lines: ResolvedLine[];
+  giftPacking?: boolean;
   children?: ReactNode;
 }) {
-  const totals = cartTotals(lines);
+  const totals = cartTotals(lines, giftPacking);
 
   return (
     <div className="rounded-[var(--radius-card)] bg-linen/70 p-6 sm:p-8">
@@ -51,6 +53,12 @@ export function OrderSummary({
           <p className="text-xs text-mocha">
             Add {formatPrice(totals.remainingForFreeShipping)} more for free shipping.
           </p>
+        )}
+        {totals.giftPacking > 0 && (
+          <div className="flex justify-between">
+            <dt className="text-mocha">Gift packing</dt>
+            <dd>{formatPrice(totals.giftPacking)}</dd>
+          </div>
         )}
         <div className="flex justify-between border-t border-sand pt-4 text-base font-medium">
           <dt>Total</dt>

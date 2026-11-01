@@ -1,12 +1,13 @@
 "use client";
 
 import { MinusIcon, PlusIcon } from "@/components/icons";
+import { site } from "@/lib/site";
 
 export function QuantityStepper({
   value,
   onChange,
   min = 1,
-  max = 50,
+  max = site.maxPerItem,
   size = "md",
   label = "Quantity",
 }: {

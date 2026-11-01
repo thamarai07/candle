@@ -1,6 +1,6 @@
-# Wick & Bloom: candle store
+# Tharikaa Little Flames: candle store
 
-A Next.js 16 store for hand-poured candles. It has a shop with categories, product pages, a bag, checkout with address collection, a custom candle builder and a contact form.
+A Next.js 16 store for handmade candles. It has a shop with categories, product pages, a bag, checkout with address collection, a custom candle builder and a contact form.
 
 ## Run it
 
@@ -13,10 +13,11 @@ npm run dev
 
 | What | File |
 | --- | --- |
-| Brand name, phone, WhatsApp, shipping rules | `src/lib/site.ts` |
+| Brand name, phone, WhatsApp, shipping, scented and gift packing prices | `src/lib/site.ts` |
+| Logo and favicon | `public/logo.jpg`, `src/app/icon.png` |
 | Colour palette and fonts | `src/app/globals.css`, `src/app/layout.tsx` |
-| Categories and products | `src/data/catalog.ts` |
-| Custom candle options and prices | `src/data/custom.ts` |
+| Categories, products and prices | `src/data/catalog.ts` |
+| Custom candle options (prices come from the catalog) | `src/data/custom.ts` |
 | Form validation (used by both forms and API) | `src/lib/validation.ts` |
 | Order and form API routes | `src/app/api/*/route.ts` |
 

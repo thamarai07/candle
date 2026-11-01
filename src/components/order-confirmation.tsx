@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useSyncExternalStore } from "react";
 import { CandleArt } from "@/components/candle-art";
-import { LAST_ORDER_KEY, type PlacedOrder } from "@/components/checkout-form";
+import { CLEAR_BAG_KEY, LAST_ORDER_KEY, type PlacedOrder } from "@/components/checkout-form";
 import { CheckIcon } from "@/components/icons";
 import { buttonClass } from "@/components/ui";
 import { cart } from "@/lib/cart-store";
@@ -26,9 +26,17 @@ export function OrderConfirmation() {
   const raw = useSyncExternalStore(noopSubscribe, readLastOrder, () => undefined);
   const order: PlacedOrder | null = raw ? JSON.parse(raw) : null;
 
+  // Only the first visit after placing an order empties the bag. The order stays
+  // in sessionStorage, so coming back to this page must not wipe a newer bag.
   useEffect(() => {
-    if (raw) cart.clear();
-  }, [raw]);
+    try {
+      if (!window.sessionStorage.getItem(CLEAR_BAG_KEY)) return;
+      window.sessionStorage.removeItem(CLEAR_BAG_KEY);
+      cart.clear();
+    } catch {
+      // Checkout already emptied the bag when storage isn't available.
+    }
+  }, []);
 
   if (raw === undefined) {
     return <div className="mx-auto mt-16 h-96 max-w-3xl animate-pulse rounded-[var(--radius-card)] bg-linen" />;
@@ -51,7 +59,7 @@ export function OrderConfirmation() {
     <div className="mx-auto max-w-3xl px-4 pt-14 sm:px-6">
       <div className="text-center">
         <div className="relative mx-auto w-28">
-          <CandleArt art={{ shape: "jar", wax: "#f3e6d1", vessel: "#e9dccb" }} className="w-full" />
+          <CandleArt art={{ shape: "jar", wax: "#fde0cc" }} className="w-full" />
           <span className="absolute right-0 bottom-3 flex h-9 w-9 items-center justify-center rounded-full bg-sage text-cream shadow-soft">
             <CheckIcon width={18} height={18} />
           </span>
@@ -83,6 +91,9 @@ export function OrderConfirmation() {
           </ul>
           <dl className="mt-4 space-y-1 border-t border-sand pt-4 text-sm">
             <div className="flex justify-between"><dt className="text-mocha">Shipping</dt><dd>{order.shipping ? formatPrice(order.shipping) : "Free"}</dd></div>
+            {order.giftPacking > 0 && (
+              <div className="flex justify-between"><dt className="text-mocha">Gift packing</dt><dd>{formatPrice(order.giftPacking)}</dd></div>
+            )}
             <div className="flex justify-between font-medium"><dt>Total</dt><dd>{formatPrice(order.total)}</dd></div>
           </dl>
         </div>

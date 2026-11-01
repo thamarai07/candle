@@ -1,3 +1,5 @@
+import { products, startingPrice } from "@/data/catalog";
+
 // Options for the custom candle builder. Prices are per candle; the final
 // quote is confirmed with the customer on WhatsApp.
 export const customOptions = {
@@ -9,13 +11,14 @@ export const customOptions = {
     { id: "festival", label: "Festival" },
     { id: "personal", label: "Just for me" },
   ],
-  vessel: [
-    { id: "glass-jar", label: "Glass jar", detail: "200g", price: 549, shape: "jar" },
-    { id: "amber-tumbler", label: "Amber tumbler", detail: "220g", price: 649, shape: "tumbler" },
-    { id: "travel-tin", label: "Travel tin", detail: "80g", price: 249, shape: "tin" },
-    { id: "bubble", label: "Bubble cube", detail: "180g", price: 379, shape: "bubble" },
-    { id: "brass-bowl", label: "Brass bowl", detail: "300g", price: 999, shape: "bowl" },
-  ],
+  // Every candle in the shop can be customised, at its unscented list price.
+  vessel: products.map((p) => ({
+    id: p.id,
+    label: p.name.replace(/ Candle$/, ""),
+    price: startingPrice(p),
+    shape: p.art.shape,
+    scale: p.art.scale,
+  })),
   scent: [
     { id: "vanilla-sandalwood", label: "Vanilla Sandalwood" },
     { id: "jasmine", label: "Jasmine Night" },

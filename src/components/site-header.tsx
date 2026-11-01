@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -15,10 +16,11 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40">
-      <div className="bg-cocoa px-4 py-2 text-center text-xs tracking-wide text-cream/90">
+      <div className="bg-ember px-4 py-2 text-center text-xs tracking-wide text-cream">
         Free shipping on orders above {formatPrice(site.shipping.freeAbove)}
-        <span className="hidden sm:inline"> · Hand-poured in {site.city.split(",")[0]}</span>
+        <span className="hidden sm:inline"> · Handmade in {site.city.split(",")[0]}</span>
       </div>
+      <div className="h-1 bg-logo-ring" />
       <div className="border-b border-sand/70 bg-cream/85 backdrop-blur-md">
         <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <button
@@ -30,7 +32,8 @@ export function SiteHeader() {
             <MenuIcon />
           </button>
 
-          <Link href="/" className="font-display text-2xl font-semibold tracking-wide text-cocoa">
+          <Link href="/" className="flex min-w-0 items-center gap-2.5 font-display text-lg leading-tight font-semibold text-cocoa sm:text-2xl">
+            <Image src={site.logo} alt="" width={52} height={52} preload className="h-12 w-12 shrink-0 rounded-full" />
             {site.name}
           </Link>
 

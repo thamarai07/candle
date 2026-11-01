@@ -3,10 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { CandleArt } from "@/components/candle-art";
-import { GiftIcon, LeafIcon, TruckIcon } from "@/components/icons";
+import { GiftIcon, HandIcon, TruckIcon } from "@/components/icons";
 import { ProductCard } from "@/components/product-card";
 import { ProductPurchase } from "@/components/product-purchase";
-import { Stars } from "@/components/ui";
 import {
   getCategory,
   getProduct,
@@ -96,10 +95,6 @@ async function ProductDetails({ params }: { params: Promise<{ slug: string }> })
           <div className="space-y-3">
             <p className="text-xs uppercase tracking-[0.2em] text-ember">{category?.name}</p>
             <h1 className="font-display text-5xl leading-tight font-medium text-cocoa">{product.name}</h1>
-            <div className="flex items-center gap-2 text-sm text-mocha">
-              <Stars rating={product.rating} />
-              <span>{product.rating.toFixed(1)} · {product.reviewCount} reviews</span>
-            </div>
             <p className="text-lg leading-relaxed text-mocha">{product.description}</p>
           </div>
 
@@ -108,32 +103,14 @@ async function ProductDetails({ params }: { params: Promise<{ slug: string }> })
           <ul className="grid gap-3 rounded-2xl bg-linen/70 p-5 text-sm text-mocha sm:grid-cols-3">
             <li className="flex items-center gap-2"><TruckIcon className="text-ember" /> Ships in 1–2 days</li>
             <li className="flex items-center gap-2"><GiftIcon className="text-ember" /> Free gift note</li>
-            <li className="flex items-center gap-2"><LeafIcon className="text-ember" /> {product.wax}</li>
+            <li className="flex items-center gap-2"><HandIcon className="text-ember" /> Handmade</li>
           </ul>
-
-          <div>
-            <h2 className="mb-4 font-display text-2xl text-cocoa">Scent notes</h2>
-            <dl className="grid grid-cols-3 divide-x divide-sand rounded-2xl border border-sand">
-              {(
-                [
-                  ["Top", product.notes.top],
-                  ["Heart", product.notes.heart],
-                  ["Base", product.notes.base],
-                ] as const
-              ).map(([label, value]) => (
-                <div key={label} className="p-4 text-center">
-                  <dt className="text-[11px] uppercase tracking-[0.18em] text-mocha">{label}</dt>
-                  <dd className="mt-1 font-display text-lg leading-tight text-cocoa">{value}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
 
           <div className="divide-y divide-sand border-y border-sand">
             {[
               {
                 title: "Details",
-                body: `Burn time ${product.burnTime}. ${product.wax}, lead-free cotton wick, phthalate-free fragrance oils. Hand-poured to order.`,
+                body: `Handmade to order. Choose unscented, or scented for ${formatPrice(site.scentedExtra)} more. Gift packing starts at ${formatPrice(site.giftPacking)} and can be added at checkout.`,
               },
               {
                 title: "Shipping & returns",

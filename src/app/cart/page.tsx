@@ -22,7 +22,7 @@ export default function CartPage() {
         <div className="mt-10 h-64 animate-pulse rounded-[var(--radius-card)] bg-linen" />
       ) : lines.length === 0 ? (
         <div className="mt-12 flex flex-col items-center gap-4 rounded-[var(--radius-card)] bg-linen/60 px-6 py-20 text-center">
-          <CandleArt art={{ shape: "jar", wax: "#f3e6d1", vessel: "#e9dccb" }} lit={false} className="w-28" />
+          <CandleArt art={{ shape: "jar", wax: "#fde0cc" }} lit={false} className="w-28" />
           <p className="font-display text-3xl">Nothing here yet</p>
           <p className="text-mocha">Your bag is waiting for something cosy.</p>
           <Link href="/shop" className={buttonClass("primary", "mt-2")}>Browse candles</Link>

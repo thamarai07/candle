@@ -15,19 +15,24 @@ export async function POST(request: Request) {
 
   // Prices are recalculated from the catalog, never taken from the browser.
   const lines = resolveCart(check.data.items);
-  if (lines.length === 0) {
+  // Never place part of an order: the customer agreed to the whole bag.
+  if (lines.length !== check.data.items.length) {
     return Response.json(
-      { message: "These items are no longer available.", errors: {} },
+      {
+        message: "Some items in your bag are no longer available. Please refresh the page to update your bag.",
+        errors: {},
+      },
       { status: 400 },
     );
   }
-  const totals = cartTotals(lines);
+  const totals = cartTotals(lines, check.data.giftPacking);
 
   const order: PlacedOrder = {
-    orderId: newId("WB"),
+    orderId: newId("TLF"),
     createdAt: new Date().toISOString(),
     subtotal: totals.subtotal,
     shipping: totals.shipping,
+    giftPacking: totals.giftPacking,
     total: totals.total,
     paymentMethod: check.data.paymentMethod,
     address: check.data.address,

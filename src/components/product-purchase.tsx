@@ -18,15 +18,12 @@ export function ProductPurchase({ product }: { product: Product }) {
     <div className="space-y-6">
       <div className="flex items-baseline gap-3">
         <p className="font-display text-4xl text-cocoa">{formatPrice(size.price)}</p>
-        {product.compareAtPrice && product.sizes.length === 1 && (
-          <p className="text-mocha/70 line-through">{formatPrice(product.compareAtPrice)}</p>
-        )}
         <p className="text-xs text-mocha">Inclusive of all taxes</p>
       </div>
 
       {product.sizes.length > 1 && (
         <fieldset>
-          <legend className="mb-3 text-sm font-medium text-cocoa">Size</legend>
+          <legend className="mb-3 text-sm font-medium text-cocoa">Choose an option</legend>
           <div className="flex flex-wrap gap-2">
             {product.sizes.map((s) => {
               const active = s.id === sizeId;

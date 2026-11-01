@@ -25,8 +25,10 @@ export default function ContactPage() {
         <ul className="space-y-4">
           {[
             { icon: ChatIcon, title: "WhatsApp", text: site.phone, href: `https://wa.me/${site.whatsapp}` },
-            { icon: GiftIcon, title: "Email", text: site.email, href: `mailto:${site.email}` },
-            { icon: TruckIcon, title: "Studio", text: `${site.city} · Ships pan-India` },
+            ...(site.email
+              ? [{ icon: GiftIcon, title: "Email", text: site.email, href: `mailto:${site.email}` }]
+              : []),
+            { icon: TruckIcon, title: "Studio", text: `${site.city} · Ships pan-India`, href: undefined },
           ].map(({ icon: Icon, title, text, href }) => (
             <li key={title} className="flex items-center gap-4 rounded-2xl bg-linen/70 p-5">
               <span className="flex h-11 w-11 items-center justify-center rounded-full bg-cream text-ember">

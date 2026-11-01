@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CandleArt } from "@/components/candle-art";
 import {
@@ -5,7 +6,6 @@ import {
   GiftIcon,
   HandIcon,
   LeafIcon,
-  StarIcon,
   TruckIcon,
 } from "@/components/icons";
 import { ProductCard } from "@/components/product-card";
@@ -14,39 +14,29 @@ import {
   categories,
   getFeaturedProducts,
   getProductsByCategory,
+  products,
+  startingPrice,
 } from "@/data/catalog";
 import { formatPrice } from "@/lib/format";
 import { site } from "@/lib/site";
 
-const perks = [
-  { icon: LeafIcon, title: "Clean soy wax", text: "Plant-based, paraffin-free, cotton wicks" },
-  { icon: HandIcon, title: "Hand-poured", text: "Small batches, made to order" },
-  { icon: GiftIcon, title: "Gift-ready", text: "Wrapped with a handwritten note" },
-  { icon: TruckIcon, title: "Ships pan-India", text: `Free above ${formatPrice(site.shipping.freeAbove)}` },
-];
+const lowestPrice = Math.min(...products.map(startingPrice));
 
-const testimonials = [
-  {
-    quote: "The Jasmine Night candle smells exactly like my paati's garden. I've ordered three more as gifts.",
-    name: "Priya R.",
-    place: "Coimbatore",
-  },
-  {
-    quote: "We ordered 120 custom jars for our wedding favours. Every single one was perfect, and the labels were so pretty.",
-    name: "Arjun & Meera",
-    place: "Bengaluru",
-  },
-  {
-    quote: "Beautiful packaging and the Rose Bubble looks even better in person. Burns clean too, no soot at all.",
-    name: "Sneha K.",
-    place: "Chennai",
-  },
+const perks = [
+  { icon: HandIcon, title: "Handmade", text: "Made by hand, made to order" },
+  { icon: LeafIcon, title: "Scented or unscented", text: `Scented +${formatPrice(site.scentedExtra)}` },
+  { icon: GiftIcon, title: "Gift packing", text: `From ${formatPrice(site.giftPacking)}` },
+  { icon: TruckIcon, title: "Ships pan-India", text: `Free above ${formatPrice(site.shipping.freeAbove)}` },
 ];
 
 const faqs = [
   {
     q: "How long does delivery take?",
-    a: "Ready-made candles ship in 1–2 working days and reach most cities in 3–6 days. Custom orders take 7–10 days to pour and cure before they ship.",
+    a: "Ready-made candles ship in 1–2 working days and reach most cities in 3–6 days. Custom orders take 7–10 days to make before they ship.",
+  },
+  {
+    q: "How much do scented candles and gift packing cost?",
+    a: `Scented candles are ${formatPrice(site.scentedExtra)} more than the listed price. Gift packing starts at ${formatPrice(site.giftPacking)} and you can add it at checkout.`,
   },
   {
     q: "Do you offer cash on delivery?",
@@ -54,7 +44,7 @@ const faqs = [
   },
   {
     q: "Can I order in bulk for weddings or corporate gifting?",
-    a: "Absolutely. Use the custom candle form for anything from 10 to 500 pieces, with your choice of vessel, scent, colour and label text.",
+    a: "Absolutely. Use the custom candle form for anything from 1 to 500 pieces, with your choice of candle, scent, colour and label text.",
   },
   {
     q: "What if my candle arrives damaged?",
@@ -64,7 +54,7 @@ const faqs = [
 
 const careTips = [
   { title: "First burn matters", text: "Let the wax melt all the way to the edges on the first light (about 2 hours) to prevent tunnelling." },
-  { title: "Trim the wick", text: "Trim to 5mm before every light for a clean, steady flame with no soot." },
+  { title: "Trim the wick", text: "Trim to 5mm before every light for a clean, steady flame." },
   { title: "Burn up to 4 hours", text: "Then let it cool. Never leave a burning candle unattended." },
 ];
 
@@ -75,21 +65,21 @@ export default function Home() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute -top-40 -right-40 h-[32rem] w-[32rem] rounded-full bg-blush/50 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-40 -left-32 h-[28rem] w-[28rem] rounded-full bg-sage-light/70 blur-3xl" />
+        <div className="pointer-events-none absolute -top-40 -right-40 h-[32rem] w-[32rem] rounded-full bg-blush/70 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-40 -left-32 h-[28rem] w-[28rem] rounded-full bg-lilac-light blur-3xl" />
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 pt-12 pb-20 sm:px-6 lg:grid-cols-2 lg:gap-8 lg:px-8 lg:pt-20 lg:pb-28">
           <div className="animate-fade-up space-y-7">
             <p className="inline-flex items-center gap-2 rounded-full border border-sand bg-white/50 px-4 py-1.5 text-xs tracking-wide text-mocha">
               <span className="h-1.5 w-1.5 rounded-full bg-ember" />
-              Hand-poured in small batches
+              Handmade candles
             </p>
             <h1 className="font-display text-5xl leading-[1.02] font-medium text-cocoa sm:text-6xl lg:text-7xl">
-              Light something <em className="font-normal text-ember">slow</em> &amp; lovely.
+              Small flames, <em className="text-logo font-normal">big happiness</em>.
             </h1>
             <p className="max-w-lg text-lg leading-relaxed text-mocha">
-              Soy candles scented with jasmine, sandalwood, filter coffee and first rain.
-              Made by hand, made to order, made to feel like home.
+              Tea lights, bubble candles, jars, flowers, hearts and stars. All made by hand,
+              all made to order, starting at just {formatPrice(lowestPrice)}.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link href="/shop" className={buttonClass("primary", "px-8 py-4")}>
@@ -99,46 +89,18 @@ export default function Home() {
                 Design your own
               </Link>
             </div>
-            <div className="flex items-center gap-4 pt-2">
-              <div className="flex -space-x-2">
-                {["#ecd2c4", "#dfe5d6", "#efe0c6", "#e5dcef"].map((c) => (
-                  <span key={c} className="h-9 w-9 rounded-full border-2 border-cream" style={{ background: c }} />
-                ))}
-              </div>
-              <div className="text-sm">
-                <p className="flex items-center gap-1 font-medium text-cocoa">
-                  <StarIcon width={14} height={14} className="text-gold" /> 4.9 average rating
-                </p>
-                <p className="text-mocha">from 900+ happy homes</p>
-              </div>
-            </div>
           </div>
 
           <div className="relative mx-auto w-full max-w-lg">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-t-full rounded-b-[2.5rem] bg-gradient-to-b from-linen to-sand">
-              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-oat/60 to-transparent" />
-              <CandleArt
-                art={{ shape: "jar", wax: "#f3e6d1", vessel: "#e9dccb", label: "No. 01" }}
-                className="absolute bottom-[8%] left-1/2 w-[58%] -translate-x-1/2"
-              />
-              <CandleArt
-                art={{ shape: "bubble", wax: "#e7b9a9", vessel: "#e7b9a9" }}
-                className="absolute bottom-[6%] left-[2%] w-[36%]"
-              />
-              <CandleArt
-                art={{ shape: "tin", wax: "#e5dcef", vessel: "#c9c2b6" }}
-                className="absolute right-[2%] bottom-[5%] w-[34%]"
-              />
-            </div>
-            <div className="absolute -bottom-6 -left-2 rounded-2xl bg-cream/95 p-4 shadow-lift backdrop-blur sm:-left-8">
-              <p className="text-[11px] uppercase tracking-[0.2em] text-mocha">Bestseller</p>
-              <p className="font-display text-xl">Vanilla Sandalwood</p>
-              <p className="text-sm text-ember">from {formatPrice(449)}</p>
-            </div>
-            <div className="absolute top-10 -right-2 hidden rounded-2xl bg-cream/95 px-4 py-3 shadow-lift backdrop-blur sm:block lg:-right-6">
-              <p className="font-display text-3xl text-cocoa">40+</p>
-              <p className="text-xs text-mocha">hours of burn time</p>
-            </div>
+            <Image
+              src={site.logo}
+              alt={`${site.name} logo: handmade candles, small flames, big happiness`}
+              width={1080}
+              height={1080}
+              sizes="(min-width: 1024px) 512px, 90vw"
+              preload
+              className="h-auto w-full rounded-full shadow-lift"
+            />
           </div>
         </div>
       </section>
@@ -166,7 +128,7 @@ export default function Home() {
           <SectionHeading
             eyebrow="Shop by collection"
             title="Find your kind of glow"
-            description="From everyday jars to festive brass bowls. New collections are added every season."
+            description="From tiny tea lights to flowers, hearts and stars."
           />
           <Link href="/shop" className="group inline-flex items-center gap-2 text-sm font-medium text-cocoa hover:text-ember">
             View everything <ArrowRightIcon width={16} height={16} className="transition group-hover:translate-x-1" />
@@ -185,7 +147,9 @@ export default function Home() {
               >
                 <p className="text-[11px] uppercase tracking-[0.18em] text-mocha">{category.tagline}</p>
                 <p className="mt-1 font-display text-2xl leading-tight text-cocoa">{category.name}</p>
-                <p className="mt-1 text-xs text-mocha">{items.length} candles</p>
+                <p className="mt-1 text-xs text-mocha">
+                  {items.length} {items.length === 1 ? "candle" : "candles"}
+                </p>
                 {items[0] && (
                   <CandleArt
                     art={items[0].art}
@@ -199,12 +163,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Bestsellers */}
+      {/* Featured candles */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Loved by our community"
-          title="Bestsellers"
-          description="The candles our customers reorder again and again."
+          eyebrow="Our candles"
+          title="Little flames to love"
+          description="A few of our candles to start with. See the whole collection in the shop."
         />
         <div className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-4">
           {featured.map((product) => (
@@ -215,32 +179,31 @@ export default function Home() {
 
       {/* Custom CTA */}
       <section className="mx-auto mt-28 max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-[2rem] bg-cocoa px-6 py-16 text-cream sm:px-12 lg:px-16">
-          <div className="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full bg-ember/30 blur-3xl" />
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-ember to-lilac px-6 py-16 text-cream sm:px-12 lg:px-16">
           <div className="relative grid items-center gap-12 lg:grid-cols-2">
             <div className="space-y-6">
-              <p className="text-xs font-medium uppercase tracking-[0.25em] text-gold">Made just for you</p>
+              <p className="text-xs font-medium uppercase tracking-[0.25em]">Made just for you</p>
               <h2 className="font-display text-4xl leading-tight sm:text-5xl">
-                Design a candle for your <em className="text-blush">moment</em>.
+                Design a candle for your <em>moment</em>.
               </h2>
-              <p className="max-w-md text-cream/75">
+              <p className="max-w-md">
                 Wedding favours, baby showers, corporate gifts or a single candle with a name on it.
-                Choose the vessel, scent, colour and label, and we&apos;ll pour it by hand.
+                Choose the candle, scent, colour and label, and we&apos;ll make it by hand.
               </p>
-              <Link href="/custom" className={buttonClass("primary", "px-8 py-4")}>
+              <Link href="/custom" className={buttonClass("light", "px-8 py-4")}>
                 Start your custom order <ArrowRightIcon width={16} height={16} />
               </Link>
             </div>
             <ol className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
               {[
-                { n: "01", t: "Pick a vessel", d: "Jar, tumbler, tin, bubble or brass bowl" },
-                { n: "02", t: "Choose a scent", d: "Eight signature blends, or unscented" },
+                { n: "01", t: "Pick a candle", d: "Flower, bubble, jar, heart, star and more" },
+                { n: "02", t: "Choose a scent", d: "Or keep it unscented" },
                 { n: "03", t: "Add your touch", d: "Wax colour and a custom label" },
               ].map((step) => (
-                <li key={step.n} className="rounded-2xl border border-cream/10 bg-cream/5 p-5">
-                  <p className="font-display text-3xl text-gold">{step.n}</p>
+                <li key={step.n} className="rounded-2xl border border-cream/25 bg-cocoa/25 p-5">
+                  <p className="font-display text-3xl">{step.n}</p>
                   <p className="mt-2 font-medium">{step.t}</p>
-                  <p className="mt-1 text-sm text-cream/65">{step.d}</p>
+                  <p className="mt-1 text-sm">{step.d}</p>
                 </li>
               ))}
             </ol>
@@ -252,31 +215,29 @@ export default function Home() {
       <section id="story" className="mx-auto grid max-w-7xl scroll-mt-28 items-center gap-12 px-4 py-28 sm:px-6 lg:grid-cols-2 lg:px-8">
         <div className="relative order-2 lg:order-1">
           <div className="grid grid-cols-2 gap-4">
-            <div className="aspect-[3/4] rounded-[var(--radius-card)] bg-blush/70 p-6">
-              <CandleArt art={{ shape: "pillar", wax: "#f3e6d1", vessel: "#f3e6d1" }} className="h-full w-full" />
+            <div className="aspect-[3/4] rounded-[var(--radius-card)] bg-blush p-6">
+              <CandleArt art={{ shape: "rose", wax: "#ef5b93" }} className="h-full w-full" />
             </div>
-            <div className="mt-12 aspect-[3/4] rounded-[var(--radius-card)] bg-sage-light p-6">
-              <CandleArt art={{ shape: "tumbler", wax: "#d9bf9f", vessel: "#a8693e" }} className="h-full w-full" />
+            <div className="mt-12 aspect-[3/4] rounded-[var(--radius-card)] bg-lilac-light p-6">
+              <CandleArt art={{ shape: "lotus", wax: "#b79be6" }} className="h-full w-full" />
             </div>
           </div>
         </div>
         <div className="order-1 space-y-6 lg:order-2">
-          <SectionHeading eyebrow="Our story" title={<>Started at a kitchen table, <em className="text-ember">poured with care</em>.</>} />
+          <SectionHeading eyebrow="Our story" title={<>Small flames, <em className="text-ember">big happiness</em>.</>} />
           <p className="leading-relaxed text-mocha">
-            {site.name} began as a weekend hobby: a few jars, a double boiler, and a lot of
-            experimenting with scents that reminded us of home. Jasmine strings, filter coffee,
-            the smell of the first rain.
+            {site.name} makes handmade candles in cheerful shapes and colours: little bubbles,
+            daisies, roses, lotuses, tulips, hearts and stars, alongside classic jars and tea lights.
           </p>
           <p className="leading-relaxed text-mocha">
-            Today every candle is still poured by hand in small batches using clean soy wax,
-            lead-free cotton wicks and phthalate-free fragrance oils. Nothing is mass-produced,
-            and every order is packed by the same hands that made it.
+            Every candle is made by hand and to order. Keep yours unscented or add a scent, and
+            add gift packing when it&apos;s a present for someone special.
           </p>
           <dl className="grid grid-cols-3 gap-4 border-t border-sand pt-6">
             {[
-              ["2,500+", "candles poured"],
-              ["12", "signature scents"],
-              ["100%", "soy & cotton"],
+              [String(products.length), "candle designs"],
+              [String(categories.length), "collections"],
+              [formatPrice(lowestPrice), "starting price"],
             ].map(([value, label]) => (
               <div key={label}>
                 <dt className="sr-only">{label}</dt>
@@ -288,35 +249,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="bg-linen/70 py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading align="center" eyebrow="Kind words" title="Glowing reviews" />
-          <ul className="mt-12 grid gap-6 md:grid-cols-3">
-            {testimonials.map((t) => (
-              <li key={t.name} className="flex flex-col rounded-[var(--radius-card)] bg-cream p-8 shadow-soft">
-                <div className="flex gap-0.5 text-gold">
-                  {[1, 2, 3, 4, 5].map((n) => <StarIcon key={n} width={16} height={16} />)}
-                </div>
-                <blockquote className="mt-4 flex-1 font-display text-xl leading-snug text-cocoa">
-                  &ldquo;{t.quote}&rdquo;
-                </blockquote>
-                <p className="mt-6 text-sm font-medium text-cocoa">{t.name}</p>
-                <p className="text-xs text-mocha">{t.place}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
       {/* Care + FAQ */}
-      <section className="mx-auto grid max-w-7xl gap-16 px-4 pt-24 sm:px-6 lg:grid-cols-2 lg:px-8">
+      <section className="mx-auto grid max-w-7xl gap-16 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
         <div id="care" className="scroll-mt-28">
           <SectionHeading eyebrow="Candle care" title="Make every candle last" />
           <ol className="mt-8 space-y-6">
             {careTips.map((tip, i) => (
               <li key={tip.title} className="flex gap-5">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blush/70 font-display text-lg text-cocoa">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blush font-display text-lg text-cocoa">
                   {i + 1}
                 </span>
                 <div>

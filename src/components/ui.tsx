@@ -11,6 +11,7 @@ const buttonBase =
 const buttonVariants = {
   primary: "bg-ember text-cream shadow-soft hover:bg-ember-dark hover:shadow-lift",
   dark: "bg-cocoa text-cream hover:bg-mocha",
+  light: "bg-cream text-ember-dark shadow-soft hover:bg-white hover:shadow-lift",
   outline: "border border-cocoa/25 text-cocoa hover:border-cocoa hover:bg-cocoa hover:text-cream",
   ghost: "text-cocoa hover:bg-linen",
 };
@@ -193,17 +194,5 @@ export function TextAreaField({
         {...props}
       />
     </FieldShell>
-  );
-}
-
-export function Stars({ rating }: { rating: number }) {
-  return (
-    <span className="inline-flex items-center gap-0.5 text-gold" aria-label={`${rating} out of 5 stars`}>
-      {[1, 2, 3, 4, 5].map((n) => (
-        <svg key={n} viewBox="0 0 24 24" width="14" height="14" fill="currentColor" opacity={n <= Math.round(rating) ? 1 : 0.25} aria-hidden="true">
-          <path d="m12 3.5 2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.8L12 3.5Z" />
-        </svg>
-      ))}
-    </span>
   );
 }

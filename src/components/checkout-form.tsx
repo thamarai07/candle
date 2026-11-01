@@ -6,9 +6,10 @@ import { useState, type FormEvent, type ReactNode } from "react";
 import { AddressFields, emptyAddress } from "@/components/address-fields";
 import { OrderSummary } from "@/components/order-summary";
 import { TextAreaField, buttonClass } from "@/components/ui";
-import { useCart, useHydrated } from "@/lib/cart-store";
+import { cart, useCart, useHydrated } from "@/lib/cart-store";
 import { formatPrice } from "@/lib/format";
 import { cartTotals, resolveCart } from "@/lib/pricing";
+import { site } from "@/lib/site";
 import { focusFirstError, postJson } from "@/lib/submit";
 import {
   paymentMethods,
@@ -18,8 +19,9 @@ import {
   type PaymentMethod,
 } from "@/lib/validation";
 
-const SAVED_ADDRESS_KEY = "wick-bloom-address";
-export const LAST_ORDER_KEY = "wick-bloom-last-order";
+const SAVED_ADDRESS_KEY = "tharikaa-address";
+export const LAST_ORDER_KEY = "tharikaa-last-order";
+export const CLEAR_BAG_KEY = "tharikaa-clear-bag";
 
 export type PlacedOrder = {
   orderId: string;
@@ -27,6 +29,7 @@ export type PlacedOrder = {
   total: number;
   subtotal: number;
   shipping: number;
+  giftPacking: number;
   paymentMethod: PaymentMethod;
   address: Address;
   lines: { name: string; size: string; quantity: number; lineTotal: number }[];
@@ -66,16 +69,17 @@ function CheckoutFormInner() {
   const router = useRouter();
   const items = useCart();
   const lines = resolveCart(items);
-  const totals = cartTotals(lines);
 
   const [address, setAddress] = useState<Address>(readSavedAddress);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("upi");
+  const [giftPacking, setGiftPacking] = useState(false);
   const [giftMessage, setGiftMessage] = useState("");
   const [notes, setNotes] = useState("");
   const [saveAddress, setSaveAddress] = useState(true);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [formMessage, setFormMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const totals = cartTotals(lines, giftPacking);
 
   const updateAddress = (field: keyof Address, value: string) => {
     setAddress((a) => ({ ...a, [field]: value }));
@@ -90,12 +94,12 @@ function CheckoutFormInner() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    const payload = { address, paymentMethod, giftMessage, notes, items };
+    const payload = { address, paymentMethod, giftPacking, giftMessage, notes, items };
 
     const check = validateCheckout(payload);
     if (!check.ok) {
       setErrors(check.errors);
-      setFormMessage("Please fix the highlighted fields.");
+      setFormMessage(check.errors.items ?? "Please fix the highlighted fields.");
       focusFirstError(check.errors);
       return;
     }
@@ -117,11 +121,17 @@ function CheckoutFormInner() {
       } else {
         window.localStorage.removeItem(SAVED_ADDRESS_KEY);
       }
-      window.sessionStorage.setItem(LAST_ORDER_KEY, JSON.stringify(result.data));
     } catch {
       // Storage is optional; the order is already placed.
     }
-    // The confirmation page clears the bag, so this form never flashes empty.
+    try {
+      window.sessionStorage.setItem(LAST_ORDER_KEY, JSON.stringify(result.data));
+      // The confirmation page clears the bag, so this form never flashes empty.
+      window.sessionStorage.setItem(CLEAR_BAG_KEY, "1");
+    } catch {
+      // Without storage the confirmation page can't do it, so empty the bag here.
+      cart.clear();
+    }
     router.push("/order-confirmed");
   }
 
@@ -143,6 +153,21 @@ function CheckoutFormInner() {
 
         <Step n={2} title="Make it special" subtitle="Optional">
           <div className="grid gap-5">
+            <label className="flex items-start gap-3 rounded-2xl border border-sand bg-white/50 p-4 text-sm has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ember/40">
+              <input
+                type="checkbox"
+                name="giftPacking"
+                checked={giftPacking}
+                onChange={(e) => setGiftPacking(e.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded accent-ember"
+              />
+              <span>
+                <span className="block font-medium text-cocoa">Add gift packing · {formatPrice(site.giftPacking)}</span>
+                <span className="mt-0.5 block text-xs text-mocha">
+                  Gift packing starts at {formatPrice(site.giftPacking)}. If your order needs bigger packing, we&apos;ll confirm the price on WhatsApp first.
+                </span>
+              </span>
+            </label>
             <TextAreaField
               label="Gift message"
               name="giftMessage"
@@ -200,7 +225,7 @@ function CheckoutFormInner() {
       </div>
 
       <div className="lg:sticky lg:top-32 lg:self-start">
-        <OrderSummary lines={lines}>
+        <OrderSummary lines={lines} giftPacking={giftPacking}>
           {formMessage && (
             <p role="alert" className="mt-6 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
               {formMessage}

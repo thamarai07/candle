@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { CandleArt } from "@/components/candle-art";
 import { QuickAddButton } from "@/components/quick-add-button";
-import { Stars } from "@/components/ui";
 import { getCategory, startingPrice } from "@/data/catalog";
 import { formatPrice } from "@/lib/format";
 import type { Product } from "@/lib/types";
@@ -45,23 +44,16 @@ export function ProductCard({ product }: { product: Product }) {
               {hasOptions && <span className="text-xs font-normal text-mocha">from </span>}
               {formatPrice(startingPrice(product))}
             </p>
-            {product.compareAtPrice && (
-              <p className="text-xs text-mocha/70 line-through">{formatPrice(product.compareAtPrice)}</p>
-            )}
           </div>
         </div>
         <p className="mt-1.5 hidden text-sm text-mocha sm:block">{product.shortDescription}</p>
-        <div className="mt-2 flex items-center gap-2 text-xs text-mocha">
-          <Stars rating={product.rating} />
-          <span>({product.reviewCount})</span>
-        </div>
-        <div className="mt-4">
+        <div className="mt-auto pt-4">
           {hasOptions ? (
             <Link
               href={`/products/${product.slug}`}
               className="inline-flex w-full items-center justify-center rounded-full border border-cocoa/20 py-2.5 text-sm text-cocoa transition hover:border-cocoa hover:bg-cocoa hover:text-cream"
             >
-              Choose size
+              Choose option
             </Link>
           ) : (
             <QuickAddButton productId={product.id} sizeId={product.sizes[0].id} />

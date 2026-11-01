@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ProductCard } from "@/components/product-card";
 import { Eyebrow } from "@/components/ui";
 import { categories } from "@/data/catalog";
+import { formatPrice } from "@/lib/format";
+import { site } from "@/lib/site";
 import type { Category, Product } from "@/lib/types";
 
 export function ShopView({
@@ -34,7 +36,10 @@ export function ShopView({
         </h1>
         <p className="text-mocha">
           {category?.description ??
-            "Every candle we make, hand-poured with soy wax and cotton wicks. Filter by collection to find your favourite."}
+            "Every candle we make, handmade to order. Filter by collection to find your favourite."}
+        </p>
+        <p className="text-sm font-medium text-cocoa">
+          Prices shown are for unscented candles. Scented +{formatPrice(site.scentedExtra)} · Gift packing from {formatPrice(site.giftPacking)}
         </p>
       </header>
 

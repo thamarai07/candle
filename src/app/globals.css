@@ -1,29 +1,33 @@
 @import "tailwindcss";
 
 /*
- * Brand palette — warm wax tones.
- * cream / linen / sand: backgrounds and surfaces
- * cocoa / mocha: text
- * ember: primary accent (buttons, links)
- * sage, blush, gold: supporting accents
+ * Brand palette, taken from the Tharikaa Little Flames logo.
+ * cream / linen / sand / oat: backgrounds and surfaces (the logo's warm paper)
+ * cocoa / mocha: text (the "Little Flames" brown)
+ * ember: primary accent, the logo's pink (buttons, links)
+ * lilac, sky, gold, sage: the logo's purple, blue, yellow and leaf green
+ * Accents are slightly deepened where needed to stay readable as text.
  */
 @theme {
-  --color-cream: #fbf6ef;
-  --color-linen: #f4ece1;
-  --color-sand: #e8d9c5;
-  --color-oat: #d9c4a8;
-  --color-cocoa: #3a2a20;
-  --color-mocha: #6e5848;
-  --color-ember: #b8603b;
-  --color-ember-dark: #9a4c2c;
-  --color-sage: #87977a;
-  --color-sage-light: #dfe5d6;
-  --color-blush: #ecd2c4;
-  --color-gold: #c6a26a;
+  --color-cream: #fdf6ec;
+  --color-linen: #fdeee3;
+  --color-sand: #f6dccb;
+  --color-oat: #edc5ad;
+  --color-cocoa: #5a3115;
+  --color-mocha: #7a5238;
+  --color-ember: #cf1767;
+  --color-ember-dark: #b0124f;
+  --color-sage: #2f7d32;
+  --color-sage-light: #d6f1f7;
+  --color-blush: #fbd3e4;
+  --color-gold: #eda92c;
+  --color-lilac: #794ac2;
+  --color-lilac-light: #ebe0f8;
+  --color-sky: #11a0c7;
 
   --radius-card: 1.25rem;
-  --shadow-soft: 0 1px 2px rgb(58 42 32 / 0.04), 0 8px 24px -8px rgb(58 42 32 / 0.12);
-  --shadow-lift: 0 2px 4px rgb(58 42 32 / 0.05), 0 18px 40px -12px rgb(58 42 32 / 0.22);
+  --shadow-soft: 0 1px 2px rgb(90 49 21 / 0.04), 0 8px 24px -8px rgb(90 49 21 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(90 49 21 / 0.05), 0 18px 40px -12px rgb(90 49 21 / 0.22);
 
   --animate-flicker: flicker 2.6s ease-in-out infinite;
   --animate-fade-up: fade-up 0.6s ease-out both;
@@ -44,6 +48,18 @@
 @theme inline {
   --font-display: var(--font-cormorant);
   --font-sans: var(--font-dm-sans);
+}
+
+/* The rainbow ring around the logo. */
+@utility bg-logo-ring {
+  background-image: linear-gradient(90deg, var(--color-gold), var(--color-ember), var(--color-lilac), var(--color-sky));
+}
+
+/* The logo's multicoloured lettering, in tones dark enough for large text. */
+@utility text-logo {
+  background-image: linear-gradient(90deg, var(--color-ember), #d9540b, var(--color-lilac), #0b7fa3);
+  background-clip: text;
+  color: transparent;
 }
 
 html {

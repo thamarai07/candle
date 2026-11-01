@@ -1,12 +1,14 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { getProductById } from "@/data/catalog";
+import { site } from "@/lib/site";
 import type { CartItem } from "@/lib/types";
 
 // A tiny external store for the cart, persisted to localStorage and kept in
 // sync across tabs. Components read it through useCart().
 
-const STORAGE_KEY = "wick-bloom-cart";
+const STORAGE_KEY = "tharikaa-cart";
 const EMPTY: CartItem[] = [];
 
 let items: CartItem[] = EMPTY;
@@ -14,13 +16,28 @@ let loaded = false;
 let drawerOpen = false;
 const listeners = new Set<() => void>();
 
+function capQuantity(quantity: number) {
+  return Math.min(site.maxPerItem, quantity);
+}
+
+// A saved bag can be older than the catalog. Drops candles that are no longer
+// sold, so the bag, its count and checkout always agree on what's in it.
+function sanitize(saved: unknown): CartItem[] {
+  if (!Array.isArray(saved)) return EMPTY;
+  return (saved as CartItem[]).flatMap((item) => {
+    const product = getProductById(item?.productId);
+    const quantity = Math.floor(Number(item?.quantity));
+    if (!product?.sizes.some((s) => s.id === item.sizeId) || !(quantity >= 1)) return [];
+    return [{ ...item, quantity: capQuantity(quantity) }];
+  });
+}
+
 function load() {
   if (loaded || typeof window === "undefined") return;
   loaded = true;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    const parsed: unknown = raw ? JSON.parse(raw) : [];
-    items = Array.isArray(parsed) ? (parsed as CartItem[]) : EMPTY;
+    items = sanitize(raw ? JSON.parse(raw) : []);
   } catch {
     items = EMPTY;
   }
@@ -73,9 +90,9 @@ export const cart = {
     setItems(
       existing
         ? items.map((i) =>
-            i === existing ? { ...i, quantity: i.quantity + quantity } : i,
+            i === existing ? { ...i, quantity: capQuantity(i.quantity + quantity) } : i,
           )
-        : [...items, { productId, sizeId, quantity }],
+        : [...items, { productId, sizeId, quantity: capQuantity(quantity) }],
     );
   },
   setQuantity(productId: string, sizeId: string, quantity: number) {
@@ -85,7 +102,7 @@ export const cart = {
         ? items.filter((i) => !(i.productId === productId && i.sizeId === sizeId))
         : items.map((i) =>
             i.productId === productId && i.sizeId === sizeId
-              ? { ...i, quantity }
+              ? { ...i, quantity: capQuantity(quantity) }
               : i,
           ),
     );

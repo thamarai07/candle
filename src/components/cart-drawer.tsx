@@ -63,7 +63,7 @@ export function CartDrawer() {
         {lines.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
             <CandleArt
-              art={{ shape: "jar", wax: "#f3e6d1", vessel: "#e9dccb" }}
+              art={{ shape: "jar", wax: "#fde0cc" }}
               lit={false}
               className="w-32"
             />

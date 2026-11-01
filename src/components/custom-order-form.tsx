@@ -9,6 +9,7 @@ import { QuantityStepper } from "@/components/quantity-stepper";
 import { SelectField, TextAreaField, TextField, buttonClass } from "@/components/ui";
 import { customOptions, customVessel, customWax } from "@/data/custom";
 import { formatPrice } from "@/lib/format";
+import { site } from "@/lib/site";
 import { focusFirstError, postJson } from "@/lib/submit";
 import {
   validateCustomOrder,
@@ -37,7 +38,7 @@ function discountFor(quantity: number) {
 export function CustomOrderForm() {
   const [choices, setChoices] = useState<Choices>({
     occasion: "",
-    vessel: "glass-jar",
+    vessel: "small-jar",
     scent: "",
     waxColor: "ivory",
     quantity: 1,
@@ -68,7 +69,8 @@ export function CustomOrderForm() {
   const vessel = customVessel(choices.vessel) ?? customOptions.vessel[0];
   const wax = customWax(choices.waxColor) ?? customOptions.waxColor[0];
   const discount = discountFor(choices.quantity);
-  const estimate = Math.round(vessel.price * choices.quantity * (1 - discount));
+  const scentExtra = choices.scent && choices.scent !== "unscented" ? site.scentedExtra : 0;
+  const estimate = Math.round((vessel.price + scentExtra) * choices.quantity * (1 - discount));
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -128,10 +130,10 @@ export function CustomOrderForm() {
           />
         </Panel>
 
-        <Panel title="Choose a vessel">
+        <Panel title="Choose a candle">
           <fieldset>
-            <legend className="sr-only">Vessel</legend>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
+            <legend className="sr-only">Candle</legend>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
               {customOptions.vessel.map((v) => {
                 const active = v.id === choices.vessel;
                 return (
@@ -147,9 +149,9 @@ export function CustomOrderForm() {
                       onChange={() => set("vessel", v.id)}
                       className="sr-only"
                     />
-                    <CandleArt art={{ shape: v.shape, wax: wax.hex, vessel: vesselTone(v.shape) }} lit={false} className="w-20" />
+                    <CandleArt art={{ shape: v.shape, wax: wax.hex, scale: v.scale }} lit={false} className="w-20" />
                     <span className="mt-2 text-sm font-medium text-cocoa">{v.label}</span>
-                    <span className="text-xs text-mocha">{v.detail} · {formatPrice(v.price)}</span>
+                    <span className="text-xs text-mocha">{formatPrice(v.price)}</span>
                   </label>
                 );
               })}
@@ -164,6 +166,7 @@ export function CustomOrderForm() {
               name="scent"
               value={choices.scent}
               error={errors.scent}
+              hint={`Scented candles are ${formatPrice(site.scentedExtra)} extra each`}
               onChange={(e) => set("scent", e.target.value)}
             >
               <option value="">Choose a scent</option>
@@ -277,7 +280,7 @@ export function CustomOrderForm() {
               art={{
                 shape: vessel.shape,
                 wax: wax.hex,
-                vessel: vesselTone(vessel.shape),
+                scale: vessel.scale,
                 label: vessel.shape === "jar" ? choices.labelText.slice(0, 12) || "Your name" : undefined,
               }}
               className="absolute inset-x-[22%] bottom-[4%]"
@@ -286,7 +289,7 @@ export function CustomOrderForm() {
           <div className="space-y-4 p-6">
             <h2 className="font-display text-2xl">Your candle</h2>
             <dl className="space-y-2 text-sm">
-              <Row label="Vessel" value={`${vessel.label} · ${vessel.detail}`} />
+              <Row label="Candle" value={vessel.label} />
               <Row label="Scent" value={customOptions.scent.find((s) => s.id === choices.scent)?.label ?? "—"} />
               <Row label="Colour" value={wax.label} />
               {choices.labelText && <Row label="Label" value={choices.labelText} />}
@@ -313,13 +316,6 @@ export function CustomOrderForm() {
       </aside>
     </form>
   );
-}
-
-function vesselTone(shape: string) {
-  if (shape === "tumbler") return "#a8693e";
-  if (shape === "tin") return "#c9c2b6";
-  if (shape === "bowl") return "#c49a4f";
-  return "#e9dccb";
 }
 
 function Panel({ title, children }: { title: string; children: ReactNode }) {

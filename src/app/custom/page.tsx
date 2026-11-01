@@ -5,7 +5,7 @@ import { Eyebrow } from "@/components/ui";
 export const metadata: Metadata = {
   title: "Custom candles",
   description:
-    "Design your own candle for weddings, birthdays, baby showers and corporate gifting. Choose the vessel, scent, colour and label.",
+    "Design your own candle for weddings, birthdays, baby showers and corporate gifting. Choose the candle, scent, colour and label.",
 };
 
 export default function CustomPage() {

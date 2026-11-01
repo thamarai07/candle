@@ -27,16 +27,18 @@ export function resolveCart(items: CartItem[]): ResolvedLine[] {
   return lines;
 }
 
-export function cartTotals(lines: ResolvedLine[]) {
+export function cartTotals(lines: ResolvedLine[], withGiftPacking = false) {
   const subtotal = lines.reduce((sum, l) => sum + l.lineTotal, 0);
   const shipping =
     subtotal === 0 || subtotal >= site.shipping.freeAbove
       ? 0
       : site.shipping.flatRate;
+  const giftPacking = withGiftPacking ? site.giftPacking : 0;
   return {
     subtotal,
     shipping,
-    total: subtotal + shipping,
+    giftPacking,
+    total: subtotal + shipping + giftPacking,
     remainingForFreeShipping: Math.max(0, site.shipping.freeAbove - subtotal),
   };
 }

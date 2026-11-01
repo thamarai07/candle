@@ -1,11 +1,14 @@
 export type VesselShape =
-  | "jar"
-  | "tumbler"
-  | "tin"
-  | "pillar"
+  | "tealight"
   | "bubble"
-  | "bowl"
-  | "set";
+  | "jar"
+  | "daisy"
+  | "rose"
+  | "lotus"
+  | "tulip"
+  | "heart"
+  | "square"
+  | "star";
 
 export type Category = {
   slug: string;
@@ -30,21 +33,18 @@ export type Product = {
   shortDescription: string;
   description: string;
   sizes: ProductSize[];
-  compareAtPrice?: number;
-  notes: { top: string; heart: string; base: string };
-  burnTime: string;
-  wax: string;
   badge?: string;
   featured?: boolean;
-  rating: number;
-  reviewCount: number;
   /** Optional photo in /public. Falls back to the illustrated candle. */
   image?: string;
   art: {
     shape: VesselShape;
     wax: string;
-    vessel: string;
+    /** Glass tint, used by jars. */
+    vessel?: string;
     label?: string;
+    /** Draws the candle smaller, for mini and small sizes. */
+    scale?: number;
   };
 };
 

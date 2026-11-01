@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { categories } from "@/data/catalog";
 import { site } from "@/lib/site";
@@ -5,10 +6,12 @@ import { site } from "@/lib/site";
 export function SiteFooter() {
   return (
     <footer className="mt-24 bg-cocoa text-cream/80">
+      <div className="h-1 bg-logo-ring" />
       <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div className="space-y-4">
+          <Image src={site.logo} alt="" width={112} height={112} className="h-28 w-28 rounded-full" />
           <p className="font-display text-3xl font-semibold text-cream">{site.name}</p>
-          <p className="max-w-xs text-sm leading-relaxed">{site.tagline}. Small batches, clean soy wax and scents inspired by home.</p>
+          <p className="max-w-xs text-sm leading-relaxed">{site.tagline}. Handmade candles in cheerful shapes and colours.</p>
         </div>
 
         <div>
@@ -41,7 +44,7 @@ export function SiteFooter() {
         <div>
           <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-gold">Say hello</p>
           <ul className="space-y-2.5 text-sm">
-            <li><a href={`mailto:${site.email}`} className="hover:text-cream">{site.email}</a></li>
+            {site.email && <li><a href={`mailto:${site.email}`} className="hover:text-cream">{site.email}</a></li>}
             <li><a href={`https://wa.me/${site.whatsapp}`} className="hover:text-cream" target="_blank" rel="noreferrer">WhatsApp {site.phone}</a></li>
             <li><a href={site.instagram} className="hover:text-cream" target="_blank" rel="noreferrer">Instagram</a></li>
             <li className="text-cream/60">{site.city}</li>

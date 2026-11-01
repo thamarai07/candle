@@ -1,5 +1,6 @@
 import { indianStates } from "@/data/india";
 import { customOptions } from "@/data/custom";
+import { site } from "@/lib/site";
 import type { CartItem } from "@/lib/types";
 
 // Shared by the forms (instant feedback) and the API routes (the real check).
@@ -36,6 +37,7 @@ export type PaymentMethod = (typeof paymentMethods)[number]["id"];
 export type CheckoutData = {
   address: Address;
   paymentMethod: PaymentMethod;
+  giftPacking: boolean;
   giftMessage: string;
   notes: string;
   items: CartItem[];
@@ -136,11 +138,14 @@ export function validateCheckout(input: unknown): Result<CheckoutData> {
         .map((i) => ({
           productId: text(i.productId, 40),
           sizeId: text(i.sizeId, 40),
-          quantity: Math.min(50, Math.max(0, Math.floor(Number(i.quantity) || 0))),
+          quantity: Math.max(0, Math.floor(Number(i.quantity) || 0)),
         }))
         .filter((i) => i.productId && i.sizeId && i.quantity > 0)
     : [];
   if (items.length === 0) errors.items = "Your bag is empty";
+  // Refused rather than trimmed, so the order always matches the price shown.
+  else if (items.some((i) => i.quantity > site.maxPerItem))
+    errors.items = `You can order up to ${site.maxPerItem} of each candle. For more, please use the custom order form.`;
 
   if (Object.keys(errors).length) return { ok: false, errors };
   return {
@@ -148,6 +153,7 @@ export function validateCheckout(input: unknown): Result<CheckoutData> {
     data: {
       address,
       paymentMethod,
+      giftPacking: raw.giftPacking === true,
       giftMessage: text(raw.giftMessage, 300),
       notes: text(raw.notes, 500),
       items,
@@ -167,7 +173,7 @@ export function validateCustomOrder(input: unknown): Result<CustomOrderData> {
   };
 
   const occasion = pick("occasion", "Choose an occasion");
-  const vessel = pick("vessel", "Choose a vessel");
+  const vessel = pick("vessel", "Choose a candle");
   const scent = pick("scent", "Choose a scent");
   const waxColor = pick("waxColor", "Choose a wax colour");
 
