@@ -37,6 +37,8 @@ export type Product = {
   featured?: boolean;
   /** Optional photo in /public. Falls back to the illustrated candle. */
   image?: string;
+  /** The image is computer-generated, so the product page says so. */
+  imageIsRender?: boolean;
   art: {
     shape: VesselShape;
     wax: string;

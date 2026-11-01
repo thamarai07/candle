@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { CandleArt } from "@/components/candle-art";
 import { GiftIcon, HandIcon, TruckIcon } from "@/components/icons";
 import { ProductCard } from "@/components/product-card";
 import { ProductPurchase } from "@/components/product-purchase";
+import { ProductVisual } from "@/components/product-visual";
 import {
   getCategory,
   getProduct,
@@ -78,7 +78,7 @@ async function ProductDetails({ params }: { params: Promise<{ slug: string }> })
       <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
         <div className="lg:sticky lg:top-32 lg:self-start">
           <div
-            className="relative aspect-square overflow-hidden rounded-[2rem]"
+            className="group relative aspect-square animate-fade-up overflow-hidden rounded-[2rem]"
             style={{ background: category?.tint }}
           >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(255,255,255,0.6),transparent_60%)]" />
@@ -87,8 +87,18 @@ async function ProductDetails({ params }: { params: Promise<{ slug: string }> })
                 {product.badge}
               </span>
             )}
-            <CandleArt art={product.art} className="absolute inset-x-[18%] bottom-[8%]" />
+            <ProductVisual
+              product={product}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              preload
+              className="absolute inset-x-[18%] bottom-[8%] animate-float"
+            />
           </div>
+          {product.imageIsRender && (
+            <p className="mt-3 text-center text-xs text-mocha">
+              Illustrative 3D image. Every candle is handmade, so yours may look a little different.
+            </p>
+          )}
         </div>
 
         <div className="space-y-8">

@@ -30,7 +30,7 @@ The shop filters, category page (`/shop/<slug>`), home page and footer pick it u
 
 ### Product photos
 
-Each product shows an illustrated candle by default. To use a real photo, put it in `public/products/` and set `image` on the product (rendering it with `next/image` still needs to be wired up in `ProductCard` and the product page).
+Each product currently uses a computer-generated 3D image from `public/products/`, and its product page says so. To use a real photo, put it in `public/products/` and replace the product's `...render("rose")` line in `src/data/catalog.ts` with `image: "/products/rose.jpg",`. Square or portrait photos work best. The shop, product page, bag and checkout all pick it up automatically. A product with no image falls back to the illustrated candle.
 
 ## Orders and submissions
 

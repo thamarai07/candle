@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CandleArt } from "@/components/candle-art";
+import { ProductVisual } from "@/components/product-visual";
 import { QuickAddButton } from "@/components/quick-add-button";
 import { getCategory, startingPrice } from "@/data/catalog";
 import { formatPrice } from "@/lib/format";
@@ -10,11 +10,11 @@ export function ProductCard({ product }: { product: Product }) {
   const hasOptions = product.sizes.length > 1;
 
   return (
-    <article className="group flex flex-col">
+    <article className="reveal group flex flex-col">
       <Link
         href={`/products/${product.slug}`}
         prefetch
-        className="relative block aspect-[4/5] overflow-hidden rounded-[var(--radius-card)] transition duration-300 group-hover:shadow-lift"
+        className="glow-card relative block aspect-[4/5] overflow-hidden rounded-[var(--radius-card)] transition duration-300 group-hover:-translate-y-1.5 group-hover:shadow-lift"
         style={{ background: category?.tint }}
       >
         {product.badge && (
@@ -23,9 +23,10 @@ export function ProductCard({ product }: { product: Product }) {
           </span>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/0 to-white/40" />
-        <CandleArt
-          art={product.art}
-          className="absolute inset-x-[12%] bottom-[6%] transition duration-500 group-hover:-translate-y-1 group-hover:scale-[1.03]"
+        <ProductVisual
+          product={product}
+          sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, 50vw"
+          className="absolute inset-x-[12%] bottom-[6%] transition duration-500 group-hover:-translate-y-2 group-hover:scale-[1.08]"
         />
       </Link>
 
@@ -51,7 +52,7 @@ export function ProductCard({ product }: { product: Product }) {
           {hasOptions ? (
             <Link
               href={`/products/${product.slug}`}
-              className="inline-flex w-full items-center justify-center rounded-full border border-cocoa/20 py-2.5 text-sm text-cocoa transition hover:border-cocoa hover:bg-cocoa hover:text-cream"
+              className="inline-flex w-full items-center justify-center rounded-full border border-cocoa/20 py-2.5 text-sm text-cocoa transition hover:border-ember hover:bg-ember hover:text-cream active:scale-[0.97]"
             >
               Choose option
             </Link>

@@ -17,7 +17,7 @@ export function ProductPurchase({ product }: { product: Product }) {
   return (
     <div className="space-y-6">
       <div className="flex items-baseline gap-3">
-        <p className="font-display text-4xl text-cocoa">{formatPrice(size.price)}</p>
+        <p key={size.price} className="animate-pop font-display text-4xl text-cocoa">{formatPrice(size.price)}</p>
         <p className="text-xs text-mocha">Inclusive of all taxes</p>
       </div>
 

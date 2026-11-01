@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { CandleArt } from "@/components/candle-art";
+import { ProductVisual } from "@/components/product-visual";
 import { getCategory } from "@/data/catalog";
 import { formatPrice } from "@/lib/format";
 import { cartTotals, type ResolvedLine } from "@/lib/pricing";
@@ -27,8 +27,8 @@ export function OrderSummary({
               className="relative flex h-16 w-14 shrink-0 items-end rounded-lg"
               style={{ background: getCategory(product.categorySlug)?.tint }}
             >
-              <CandleArt art={product.art} lit={false} className="w-full" />
-              <span className="absolute -top-2 -right-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-cocoa px-1 text-[10px] text-cream">
+              <ProductVisual product={product} sizes="56px" lit={false} className="w-full" />
+              <span className="absolute -top-2 -right-2 z-10 flex h-5 min-w-5 items-center justify-center rounded-full bg-cocoa px-1 text-[10px] text-cream">
                 {quantity}
               </span>
             </div>

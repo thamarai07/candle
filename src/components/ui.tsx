@@ -6,12 +6,12 @@ import type {
 } from "react";
 
 const buttonBase =
-  "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium tracking-wide transition duration-200 disabled:cursor-not-allowed disabled:opacity-60";
+  "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium tracking-wide transition duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60";
 
 const buttonVariants = {
-  primary: "bg-ember text-cream shadow-soft hover:bg-ember-dark hover:shadow-lift",
+  primary: "btn-shine bg-ember text-cream shadow-soft hover:bg-ember-dark hover:shadow-lift",
   dark: "bg-cocoa text-cream hover:bg-mocha",
-  light: "bg-cream text-ember-dark shadow-soft hover:bg-white hover:shadow-lift",
+  light: "btn-shine bg-cream text-ember-dark shadow-soft hover:bg-white hover:shadow-lift",
   outline: "border border-cocoa/25 text-cocoa hover:border-cocoa hover:bg-cocoa hover:text-cream",
   ghost: "text-cocoa hover:bg-linen",
 };
@@ -25,7 +25,7 @@ export function buttonClass(
 
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <p className="text-xs font-medium uppercase tracking-[0.25em] text-ember">
+    <p className="text-logo w-fit text-xs font-medium uppercase tracking-[0.25em]">
       {children}
     </p>
   );
@@ -46,10 +46,18 @@ export function SectionHeading({
     <div
       className={`max-w-2xl space-y-3 ${align === "center" ? "mx-auto text-center" : ""}`}
     >
-      {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
+      {eyebrow && (
+        <div className={align === "center" ? "flex justify-center" : undefined}>
+          <Eyebrow>{eyebrow}</Eyebrow>
+        </div>
+      )}
       <h2 className="font-display text-4xl leading-tight font-medium text-cocoa sm:text-5xl">
         {title}
       </h2>
+      <div
+        aria-hidden="true"
+        className={`h-1 w-24 animate-gradient rounded-full bg-logo-ring bg-[length:200%_auto] ${align === "center" ? "mx-auto" : ""}`}
+      />
       {description && (
         <p className="text-base leading-relaxed text-mocha">{description}</p>
       )}

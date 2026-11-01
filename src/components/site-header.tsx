@@ -61,7 +61,7 @@ export function SiteHeader() {
           >
             <BagIcon width={22} height={22} />
             {count > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-ember px-1 text-[10px] font-semibold text-cream">
+              <span key={count} className="absolute -top-0.5 -right-0.5 flex h-5 min-w-5 animate-pop items-center justify-center rounded-full bg-ember px-1 text-[10px] font-semibold text-cream">
                 {count}
               </span>
             )}

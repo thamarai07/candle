@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CandleArt } from "@/components/candle-art";
 import { OrderSummary } from "@/components/order-summary";
+import { ProductVisual } from "@/components/product-visual";
 import { QuantityStepper } from "@/components/quantity-stepper";
 import { buttonClass } from "@/components/ui";
 import { getCategory } from "@/data/catalog";
@@ -34,10 +35,10 @@ export default function CartPage() {
               <li key={`${product.id}-${size.id}`} className="flex gap-5 py-6">
                 <Link
                   href={`/products/${product.slug}`}
-                  className="flex h-32 w-28 shrink-0 items-end rounded-2xl"
+                  className="relative flex h-32 w-28 shrink-0 items-end rounded-2xl"
                   style={{ background: getCategory(product.categorySlug)?.tint }}
                 >
-                  <CandleArt art={product.art} lit={false} className="w-full" />
+                  <ProductVisual product={product} sizes="112px" lit={false} className="w-full" />
                 </Link>
                 <div className="flex flex-1 flex-col">
                   <div className="flex justify-between gap-4">

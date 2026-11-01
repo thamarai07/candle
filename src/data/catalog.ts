@@ -50,6 +50,12 @@ function options(price: number): ProductSize[] {
   ];
 }
 
+// Computer-generated images of each candle. To use a real photo instead, put it
+// in public/products/ and replace the line with: image: "/products/rose.jpg",
+function render(id: string) {
+  return { image: `/products/${id}.jpg`, imageIsRender: true };
+}
+
 export const products: Product[] = [
   {
     id: "tea-light",
@@ -60,6 +66,7 @@ export const products: Product[] = [
     description:
       "Small enough to tuck in anywhere. Light a few together for a festive table, a pooja corner or a cosy evening.",
     sizes: options(20),
+    ...render("tea-light"),
     featured: true,
     art: { shape: "tealight", wax: "#fff3dc" },
   },
@@ -72,6 +79,7 @@ export const products: Product[] = [
     description:
       "A small bubble cube that brightens up a desk or a shelf, and makes a sweet return gift.",
     sizes: options(79),
+    ...render("mini-bubble"),
     featured: true,
     art: { shape: "bubble", wax: "#f7a8c8", scale: 0.8 },
   },
@@ -84,6 +92,7 @@ export const products: Product[] = [
     description:
       "Our bubble cube in a larger size, made to be noticed on a coffee table or bedside.",
     sizes: options(129),
+    ...render("medium-bubble"),
     art: { shape: "bubble", wax: "#c9a9ee" },
   },
   {
@@ -95,6 +104,7 @@ export const products: Product[] = [
     description:
       "An easy everyday candle in a small jar, just right for a first try or a small gift.",
     sizes: options(99),
+    ...render("small-jar"),
     featured: true,
     art: { shape: "jar", wax: "#fde0cc", scale: 0.82 },
   },
@@ -107,6 +117,7 @@ export const products: Product[] = [
     description:
       "Our jar candle in a medium size, for the room you spend the most time in.",
     sizes: options(179),
+    ...render("medium-jar"),
     featured: true,
     art: { shape: "jar", wax: "#fbd0dc" },
   },
@@ -119,6 +130,7 @@ export const products: Product[] = [
     description:
       "A happy little daisy that looks lovely on a tray, beside a photo frame or tucked into a gift box.",
     sizes: options(69),
+    ...render("daisy"),
     featured: true,
     art: { shape: "daisy", wax: "#fffaf0" },
   },
@@ -131,6 +143,7 @@ export const products: Product[] = [
     description:
       "A rose in full bloom, made for anniversaries, thank-yous and everything in between.",
     sizes: options(79),
+    ...render("rose"),
     featured: true,
     art: { shape: "rose", wax: "#ef5b93" },
   },
@@ -143,6 +156,7 @@ export const products: Product[] = [
     description:
       "A lotus with gently opening petals. A beautiful choice for pooja, Diwali and festive gifting.",
     sizes: options(89),
+    ...render("lotus"),
     featured: true,
     art: { shape: "lotus", wax: "#b79be6" },
   },
@@ -155,6 +169,7 @@ export const products: Product[] = [
     description:
       "A neat little tulip that adds a pop of colour to a shelf, a table or a gift box.",
     sizes: options(89),
+    ...render("tulip"),
     art: { shape: "tulip", wax: "#f9a35c" },
   },
   {
@@ -166,6 +181,7 @@ export const products: Product[] = [
     description:
       "Made for birthdays, anniversaries and little surprises. Easy to love, easier to gift.",
     sizes: options(69),
+    ...render("heart"),
     featured: true,
     art: { shape: "heart", wax: "#e8336f" },
   },
@@ -178,6 +194,7 @@ export const products: Product[] = [
     description:
       "A simple square block with neat edges. Stack a few on a tray for a modern look.",
     sizes: options(99),
+    ...render("square"),
     art: { shape: "square", wax: "#7fd4dd" },
   },
   {
@@ -189,6 +206,7 @@ export const products: Product[] = [
     description:
       "A star-shaped candle for kids' parties, Christmas tables and anyone who deserves a gold star.",
     sizes: options(79),
+    ...render("star"),
     art: { shape: "star", wax: "#f7c948" },
   },
 ];

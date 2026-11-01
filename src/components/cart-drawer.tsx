@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { CandleArt } from "@/components/candle-art";
 import { CloseIcon } from "@/components/icons";
+import { ProductVisual } from "@/components/product-visual";
 import { QuantityStepper } from "@/components/quantity-stepper";
 import { buttonClass } from "@/components/ui";
 import { cart, useCart, useCartDrawer } from "@/lib/cart-store";
@@ -92,10 +93,10 @@ export function CartDrawer() {
                   <Link
                     href={`/products/${product.slug}`}
                     onClick={cart.closeDrawer}
-                    className="flex h-24 w-20 shrink-0 items-end justify-center rounded-xl"
+                    className="relative flex h-24 w-20 shrink-0 items-end justify-center rounded-xl"
                     style={{ background: getCategory(product.categorySlug)?.tint }}
                   >
-                    <CandleArt art={product.art} lit={false} className="w-full" />
+                    <ProductVisual product={product} sizes="80px" lit={false} className="w-full" />
                   </Link>
                   <div className="flex flex-1 flex-col">
                     <div className="flex justify-between gap-2">
